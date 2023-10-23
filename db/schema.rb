@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_09_132343) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_23_194133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_132343) do
   create_table "adopter_accounts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", default: 0, null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_adopter_accounts_on_user_id"
   end
 
@@ -208,9 +208,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_132343) do
   create_table "staff_accounts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "organization_id", default: 1, null: false
+    t.bigint "organization_id", null: false
     t.boolean "verified", default: false, null: false
-    t.bigint "user_id", default: 0, null: false
+    t.bigint "user_id", null: false
     t.index ["organization_id"], name: "index_staff_accounts_on_organization_id"
     t.index ["user_id"], name: "index_staff_accounts_on_user_id"
   end
@@ -221,6 +221,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_132343) do
     t.index ["role_id"], name: "index_staff_accounts_roles_on_role_id"
     t.index ["staff_account_id", "role_id"], name: "index_staff_accounts_roles_on_staff_account_id_and_role_id"
     t.index ["staff_account_id"], name: "index_staff_accounts_roles_on_staff_account_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "completed", default: false
+    t.bigint "pet_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pet_id"], name: "index_tasks_on_pet_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -268,4 +278,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_09_132343) do
   add_foreign_key "pets", "organizations"
   add_foreign_key "staff_accounts", "organizations"
   add_foreign_key "staff_accounts", "users"
+  add_foreign_key "tasks", "pets"
 end
